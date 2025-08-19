@@ -73,7 +73,7 @@ jobs:
         run: cd Spring-Project && mvn clean verify
 
       - name: Build Local Docker Image with Maven
-        run: mvn clean package -Pbuild-docker-image
+        run: cd Spring-Project && mvn clean package -Pbuild-docker-image
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
