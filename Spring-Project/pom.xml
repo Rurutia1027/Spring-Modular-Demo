@@ -15,6 +15,27 @@
         <module>gateway</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>build-docker-image</id>
+            <modules>
+                <module>admin</module>
+                <module>project</module>
+                <module>aggregation</module>
+                <module>gateway</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>push-docker-image</id>
+            <modules>
+                <module>admin</module>
+                <module>project</module>
+                <module>aggregation</module>
+                <module>gateway</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <properties>
         <java.version>17</java.version>
         <spring-boot.version>3.0.7</spring-boot.version>
@@ -167,40 +188,40 @@
                 </executions>
             </plugin>
 
-            <!-- Plugins for Jib (build docker images) -->
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>3.4.4</version>
-                <configuration>
-                    <from>
-                        <image>eclipse-temurin:17</image>
-                        <platforms>
-                            <platform>
-                                <architecture>arm64</architecture>
-                                <os>linux</os>
-                            </platform>
-                            <platform>
-                                <architecture>amd64</architecture>
-                                <os>linux</os>
-                            </platform>
-                        </platforms>
-                    </from>
-                    <to>
-                        <tags>
-                            <tag>latest</tag>
-                        </tags>
-                    </to>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            &lt;!&ndash; Plugins for Jib (build docker images) &ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>com.google.cloud.tools</groupId>-->
+<!--                <artifactId>jib-maven-plugin</artifactId>-->
+<!--                <version>3.4.4</version>-->
+<!--                <configuration>-->
+<!--                    <from>-->
+<!--                        <image>eclipse-temurin:17</image>-->
+<!--                        <platforms>-->
+<!--                            <platform>-->
+<!--                                <architecture>arm64</architecture>-->
+<!--                                <os>linux</os>-->
+<!--                            </platform>-->
+<!--                            <platform>-->
+<!--                                <architecture>amd64</architecture>-->
+<!--                                <os>linux</os>-->
+<!--                            </platform>-->
+<!--                        </platforms>-->
+<!--                    </from>-->
+<!--                    <to>-->
+<!--                        <tags>-->
+<!--                            <tag>latest</tag>-->
+<!--                        </tags>-->
+<!--                    </to>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <!-- Plugins for JaCoCo -->
             <plugin>
