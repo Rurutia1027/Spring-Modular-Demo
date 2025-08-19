@@ -7,6 +7,13 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+  flyway:
+    url: jdbc:mysql://127.0.0.1:3316/demo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    user: admin
+    password: admin
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    enabled: true
   datasource:
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
     url: jdbc:shardingsphere:classpath:shardingsphere-config.yaml
@@ -22,7 +29,7 @@ spring:
         enabled: false    # if you had Ribbon previously, disable it
     consul:
       host: 127.0.0.1
-      port: 8500
+      port: 8510
       discovery:
         register: true
         service-name: spring-project

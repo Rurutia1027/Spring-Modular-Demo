@@ -23,7 +23,7 @@ spring:
         enabled: false    # if you had Ribbon previously, disable it
     consul:
       host: 127.0.0.1
-      port: 8500
+      port: 8510
       discovery:
         register: true
         service-name: spring-admin
