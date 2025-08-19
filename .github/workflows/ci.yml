@@ -76,7 +76,7 @@ jobs:
         run: cd Spring-Project && mvn jacoco:report
 
       - name: Upload JaCoCo HTML report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
           path: Spring-Project/project/target/site/jacoco/
