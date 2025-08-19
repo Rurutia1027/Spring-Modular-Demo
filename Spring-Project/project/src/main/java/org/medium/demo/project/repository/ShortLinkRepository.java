@@ -15,28 +15,17 @@
  * limitations under the License.
  */
 
-package org.medium.demo.project.entity;
+package org.medium.demo.project.repository;
 
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.medium.demo.project.common.db.BaseDO;
+import org.medium.demo.project.entity.ShortLinkDO;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Data
-@Table(name = "short_link_route")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ShortLinkRouteDO extends BaseDO {
-    /**
-     * Group ID
-     */
-    private String gid;
+import java.util.Optional;
 
-    /**
-     * Short Link full short url address
-     */
-    private String fullShortUrl;
+@Repository
+public interface ShortLinkRepository extends JpaRepository<ShortLinkDO, Long> {
+    Optional<ShortLinkDO> findByShortUri(String shortUri);
+
+    void deleteByShortUri(String shortUri);
 }

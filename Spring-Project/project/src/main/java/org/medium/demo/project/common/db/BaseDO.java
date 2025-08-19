@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.medium.demo.project.common;
+package org.medium.demo.project.common.db;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

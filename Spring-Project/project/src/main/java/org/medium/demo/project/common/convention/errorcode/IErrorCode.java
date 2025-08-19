@@ -15,28 +15,16 @@
  * limitations under the License.
  */
 
-package org.medium.demo.project.entity;
+package org.medium.demo.project.common.convention.errorcode;
 
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.medium.demo.project.common.db.BaseDO;
-
-@Data
-@Table(name = "short_link_route")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ShortLinkRouteDO extends BaseDO {
+public interface IErrorCode {
     /**
-     * Group ID
+     * error code
      */
-    private String gid;
+    String code();
 
     /**
-     * Short Link full short url address
+     * error message
      */
-    private String fullShortUrl;
+    String message();
 }

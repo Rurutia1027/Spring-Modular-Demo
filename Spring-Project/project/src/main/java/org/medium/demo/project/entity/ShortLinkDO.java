@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.medium.demo.project.common.BaseDO;
+import org.medium.demo.project.common.db.BaseDO;
 
 import java.util.Date;
 

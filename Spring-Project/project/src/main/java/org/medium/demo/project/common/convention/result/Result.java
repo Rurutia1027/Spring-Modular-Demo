@@ -15,28 +15,49 @@
  * limitations under the License.
  */
 
-package org.medium.demo.project.entity;
+package org.medium.demo.project.common.convention.result;
 
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.medium.demo.project.common.db.BaseDO;
+import lombok.experimental.Accessors;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 @Data
-@Table(name = "short_link_route")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ShortLinkRouteDO extends BaseDO {
-    /**
-     * Group ID
-     */
-    private String gid;
+@Accessors(chain = true)
+public class Result<T> implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 9374349023727L;
 
     /**
-     * Short Link full short url address
+     * success code
      */
-    private String fullShortUrl;
+    public static final String SUCCESS_CODE = "0";
+
+    /**
+     * response code
+     */
+    private String code;
+
+    /**
+     * response message
+     */
+    private String message;
+
+    /**
+     * respond data
+     */
+    private T data;
+
+    /**
+     * request id
+     * todo:
+     * - In complex distributed call systems, this is commonly used as a anchor and is
+     * - bound to the full trace ID for correlation purposes.
+     */
+    private String requestId;
+
+    public boolean isSuccess() {
+        return SUCCESS_CODE.equals(code);
+    }
 }
