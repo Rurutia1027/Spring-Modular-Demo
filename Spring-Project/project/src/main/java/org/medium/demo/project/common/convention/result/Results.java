@@ -84,4 +84,10 @@ public final class Results {
                 .setCode(errorCode.code())
                 .setMessage(errorCode.message());
     }
+
+    public static <T> Result<T> failureFor(String errorCode, String errorMessage) {
+        return new Result<T>()
+                .setCode(errorCode)
+                .setMessage(errorMessage);
+    }
 }
