@@ -22,7 +22,3 @@ spring:
       discovery:
         register: true
         service-name: spring-project
-
-short-link:
-  domain:
-    default: localhost:8001

@@ -1,0 +1,58 @@
+services:
+  # docker-compose up -d  consul
+  consul:
+    image: hashicorp/consul:latest
+    container_name: demo-consul
+    ports:
+      - "8510:8500"      # Consul UI & API Port
+      - "8610:8600/udp"  # Consul DNS  Port
+    command: "agent -dev -client=0.0.0.0"
+    networks:
+      - demo_backend
+    restart: unless-stopped
+
+  # docker-compose up -d  envoy
+  envoy:
+    image: envoyproxy/envoy:v1.26.0
+    container_name: demo-envoy
+    ports:
+      - "11000:10000"   # Ports that Envoy listens to, our services request can be sent through this port.
+    volumes:
+      - ./gateway/envoy.yml:/etc/envoy/envoy.yaml:ro  # Envoy config YML file
+    networks:
+      - demo_backend
+    depends_on:
+      - consul
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: demo-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: demo
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3316:3306"
+    volumes:
+      - demo_mysql_data:/var/lib/mysql
+    networks:
+      - demo_backend
+
+  redis:
+    image: redis:7.0
+    container_name: demo-redis-cache
+    ports:
+      - "6389:6379"
+    volumes:
+      - demo_redis_data:/data
+    networks:
+      - demo_backend
+
+volumes:
+  demo_mysql_data:
+  demo_redis_data:
+
+networks:
+  demo_backend:
