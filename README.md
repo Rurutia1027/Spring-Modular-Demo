@@ -1,4 +1,4 @@
-# Spring Modular Demo 
+# Medium Demo Cloud Native Project | [![Medium Demo Cloud Native Project](https://github.com/Rurutia1027/Spring-Modular-Demo/actions/workflows/ci.yml/badge.svg)](https://github.com/Rurutia1027/Spring-Modular-Demo/actions/workflows/ci.yml)
 
 ## Overview 
 This repository is a **medium-scale demostration project** showcasing how to setup a **multi-module Spring Boot & Spring Cloud architecture** with the following features: 
