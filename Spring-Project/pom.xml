@@ -32,6 +32,7 @@
         <aspectj.version>1.9.7</aspectj.version>
         <junit.jupiter.version>5.9.3</junit.jupiter.version>
         <spotless-maven-plugin.version>2.22.1</spotless-maven-plugin.version>
+        <flyway.version>9.21.1</flyway.version>
     </properties>
 
     <dependencies>
@@ -61,6 +62,12 @@
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>shardingsphere-jdbc-core</artifactId>
                 <version>${shardingsphere.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
@@ -93,9 +100,19 @@
                 <version>${guava.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-mysql</artifactId>
+                <version>${flyway.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
-                <version>3.2.2</version>
+                <version>${spring-boot.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

@@ -17,7 +17,6 @@
 
 package org.medium.demo.project.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -82,14 +81,6 @@ public class ShortLinkDO extends BaseDO {
      * Short link validate date range
      */
     private Date validDate;
-
-
-    /**
-     * Description
-     */
-    @Column(name = "`describe`")
-    private String describe;
-
 
     /**
      * Website favicon
