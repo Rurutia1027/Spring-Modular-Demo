@@ -78,6 +78,12 @@ jobs:
           name: jacoco-report
           path: Spring-Project/project/target/site/jacoco/
 
+      - name: Docker Login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build Local Docker Image with Maven
         run: cd Spring-Project && mvn clean package -Pbuild-docker-image
         env:
