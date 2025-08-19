@@ -15,6 +15,26 @@
         <module>gateway</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>build-docker-image</id>
+            <modules>
+                <module>admin</module>
+                <module>project</module>
+                <module>aggregation</module>
+                <module>gateway</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>push-docker-image</id>
+            <modules>
+                <module>admin</module>
+                <module>project</module>
+                <module>aggregation</module>
+                <module>gateway</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <properties>
         <java.version>17</java.version>
@@ -33,6 +53,7 @@
         <junit.jupiter.version>5.9.3</junit.jupiter.version>
         <spotless-maven-plugin.version>2.22.1</spotless-maven-plugin.version>
         <flyway.version>9.21.1</flyway.version>
+        <image>nanachi1027/${project.artifactId}:${project.version}</image>
     </properties>
 
     <dependencies>
@@ -166,7 +187,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <!-- Plugins for JaCoCo -->
             <plugin>
                 <groupId>org.jacoco</groupId>
