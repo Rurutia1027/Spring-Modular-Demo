@@ -112,6 +112,7 @@
                                 </platforms>
                             </from>
                             <to>
+                                <!-- TODO: repo name should be modified -->
                                 <image>docker://nanachi1027/${project.artifactId}:${project.version}</image>
                             </to>
                         </configuration>
