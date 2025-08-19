@@ -10,13 +10,13 @@ rules:
   - !SHARDING
     tables:
       t_link:
-        actualDataNodes: ds_0.t_link_${0..4}
+        actualDataNodes: ds_0.t_link_${0..3}
         tableStrategy:
           standard:
             shardingColumn: gid
             shardingAlgorithmName: link_table_hash_mod
       t_link_route:
-        actualDataNodes: ds_0.t_link_route_${0..4}
+        actualDataNodes: ds_0.t_link_route_${0..3}
         tableStrategy:
           standard:
             shardingColumn: full_short_url
@@ -25,10 +25,10 @@ rules:
       link_table_hash_mod:
         type: HASH_MOD
         props:
-          sharding-count: 16
+          sharding-count: 4
       link_route_table_hash_mod:
         type: HASH_MOD
         props:
-          sharding-count: 16
+          sharding-count: 4
 props:
   sql-show: true
