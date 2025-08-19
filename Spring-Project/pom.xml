@@ -19,19 +19,19 @@
         <profile>
             <id>build-docker-image</id>
             <modules>
-                <module>admin</module>
+<!--                <module>admin</module>-->
                 <module>project</module>
-                <module>aggregation</module>
-                <module>gateway</module>
+<!--                <module>aggregation</module>-->
+<!--                <module>gateway</module>-->
             </modules>
         </profile>
         <profile>
             <id>push-docker-image</id>
             <modules>
-                <module>admin</module>
+<!--                <module>admin</module>-->
                 <module>project</module>
-                <module>aggregation</module>
-                <module>gateway</module>
+<!--                <module>aggregation</module>-->
+<!--                <module>gateway</module>-->
             </modules>
         </profile>
     </profiles>
