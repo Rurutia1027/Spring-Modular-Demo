@@ -68,3 +68,15 @@ jobs:
 
       - name: Run Tests
         run: cd Spring-Project && mvn test
+
+      - name: Build and run tests
+        run: cd Spring-Project && mvn clean verify
+
+      - name: Generate JaCoCo report
+        run: cd Spring-Project && mvn jacoco:report
+
+      - name: Upload JaCoCo HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: Spring-Project/project/target/site/jacoco/
