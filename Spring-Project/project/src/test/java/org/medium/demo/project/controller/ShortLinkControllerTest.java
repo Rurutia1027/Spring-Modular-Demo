@@ -17,13 +17,23 @@
 
 package org.medium.demo.project.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.medium.demo.project.common.convention.result.Result;
 import org.medium.demo.project.service.ShortLinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.UUID;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @WebMvcTest(controllers = ShortLinkController.class)
 class ShortLinkControllerTest {
@@ -37,5 +47,18 @@ class ShortLinkControllerTest {
     public void testMockInitOK() {
         Assertions.assertNotNull(mockMvc);
         Assertions.assertNotNull(shortLinkService);
+    }
+
+    @Test
+    @SneakyThrows
+    public void givenValidRequest_whenHello_thenReturnSuccess() {
+        // --- given ---
+        String name = UUID.randomUUID().toString();
+
+        // --- when && then ---
+        mockMvc.perform(get("/api/medium/demo/project/hello/" + name))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(Result.SUCCESS_CODE))
+                .andExpect(jsonPath("$.data").value("Hello " + name));
     }
 }
