@@ -1,7 +1,11 @@
 package org.medium.demo.gateway;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class GatewaySpringApplication {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        SpringApplication.run(GatewaySpringApplication.class, args);
     }
 }
