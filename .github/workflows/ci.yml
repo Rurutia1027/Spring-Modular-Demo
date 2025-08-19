@@ -64,11 +64,7 @@ jobs:
           sleep 20
 
       - name: Build with Maven
-        run: |
-          cd Spring-Project
-	  mvn clean install -DskipTests
+        run: cd Spring-Project && mvn clean install -DskipTests
 
       - name: Run Tests
-        run: |
-          cd Spring-Project
-          mvn test
+        run: cd Spring-Project && mvn test
