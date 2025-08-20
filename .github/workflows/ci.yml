@@ -32,31 +32,25 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      
-      consul:
-        image: hashicorp/consul:latest
-        ports:
-          - 8510:8500
-          - 8610:8600/udp
-        options: >-
-          --entrypoint consul
-          hashicorp/consul:latest agent -dev -client=0.0.0.0
-          --health-cmd "curl -f http://localhost:8510/v1/status/leader || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-      envoy:
-        image: envoyproxy/envoy:v1.26.0
-        ports:
-          - 11000:10000
-        volumes:
-          - ./gateway/envoy.yml:/etc/envoy/envoy.yaml:ro
-        # make sure envoy waits for consul to start
-        options: >-
-          --restart=unless-stopped
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Start Consul
+        run: |
+          docker run -d --name consul \
+            -p 8510:8500 -p 8610:8600/udp \
+            hashicorp/consul:latest \
+            agent -dev -client=0.0.0.0
+
+      - name: Start Envoy
+        run: |
+          docker run -d --name envoy \
+            -p 11000:10000 \
+            --link consul:consul \
+            envoyproxy/envoy:v1.26.0 \
+            -c /etc/envoy/envoy.yaml
       - name: Checkout code
         uses: actions/checkout@v3
 
