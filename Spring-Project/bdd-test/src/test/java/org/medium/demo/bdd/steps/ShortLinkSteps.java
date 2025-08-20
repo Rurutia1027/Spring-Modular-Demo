@@ -1,59 +1,37 @@
 package org.medium.demo.bdd.steps;
 
-import io.cucumber.java.After;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import org.medium.demo.bdd.util.HttpClientUtil;
-import org.medium.demo.project.entity.ShortLinkDO;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ShortLinkSteps {
-    private ShortLinkDO lastCreated;
+    private JsonNode responseBody;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Given("a new short link with url {string}")
-    public void createShortLink(String fullUrl) {
-        ShortLinkDO request = new ShortLinkDO();
-        request.setFullShortUrl(fullUrl);
-        lastCreated = HttpClientUtil.post(
-                "http://localhost:8101/api/medium/demo/project/create",
+    @Given("the name is {string}")
+    public void theNameIs(String name) throws Exception {
+        // Build JSON request
+        Map<String, String> request = Map.of("name", name);
+
+        // Call the endpoint
+        String rawResponse = HttpClientUtil.post(
+                "http://localhost:8101/api/medium/demo/project/hello/" + name,
                 request,
-                ShortLinkDO.class,
+                String.class,
                 null
         );
-        assertNotNull(lastCreated.getShortUri());
+
+        responseBody = objectMapper.readTree(rawResponse);
     }
 
-    @When("I fetch short link by shortUri")
-    public void fetchShortLink() {
-        ShortLinkDO fetched = HttpClientUtil.get(
-                "http://localhost:8101/api/medium/demo/project/short-uri/" + lastCreated.getShortUri(),
-                ShortLinkDO.class,
-                null
-        );
-        assertEquals(lastCreated.getFullShortUrl(), fetched.getFullShortUrl());
-    }
-
-    @Then("the short link click count increments by {int}")
-    public void incrementClickCount(int increment) {
-        ShortLinkDO updated = HttpClientUtil.post(
-                "http://localhost:8101/api/medium/demo/project/increment-click/" + lastCreated.getShortUri(),
-                null,
-                ShortLinkDO.class,
-                null
-        );
-        assertEquals(increment, updated.getClickNum());
-    }
-
-    @After
-    public void cleanup() {
-        if (lastCreated != null) {
-            HttpClientUtil.delete(
-                    "http://localhost:8101/api/medium/demo/project/delete/" + lastCreated.getShortUri(),
-                    Void.class
-            );
-        }
+    @Then("the greeting is {string}")
+    public void theGreetingIs(String expectedGreeting) {
+        assertEquals(expectedGreeting, responseBody.get("data").asText());
     }
 }
