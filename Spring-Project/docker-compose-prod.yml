@@ -13,7 +13,7 @@ services:
       timeout: 5s
       retries: 3
     networks:
-      - spring-project_backend
+      - spring-project
     restart: unless-stopped
 
   # docker-compose up -d  envoy
@@ -75,7 +75,7 @@ services:
     image: nanachi1027/project:1.0-SNAPSHOT
     container_name: spring-project
     ports:
-      - "8001:8101"
+      - "8101:8101"
     environment:
       SPRING_PROFILES_ACTIVE: prod
     depends_on:

@@ -112,8 +112,7 @@
                                 </platforms>
                             </from>
                             <to>
-                                <!-- TODO: repo name should be modified -->
-                                <image>docker://nanachi1027/${project.artifactId}:${project.version}</image>
+                                <image>docker://nanachi1027/spring-project/${project.artifactId}:${project.version}</image>
                             </to>
                         </configuration>
                         <executions>
@@ -152,12 +151,20 @@
                                 </platforms>
                             </from>
                             <to>
-                                <image>docker.io/nanachi1027/${project.artifactId}:${project.version}</image>
+                                <image>docker.io/nanachi1027/spring-project/${project.artifactId}:${project.version}</image>
                                 <auth>
                                     <username>${env.DOCKER_USERNAME}</username>
                                     <password>${env.DOCKER_PASSWORD}</password>
                                 </auth>
                             </to>
+                            <extraDirectories>
+                                <paths>
+                                    <path>
+                                        <from>${project.basedir}/src/main/resources</from>
+                                        <into>/app/resources</into>
+                                    </path>
+                                </paths>
+                            </extraDirectories>
                         </configuration>
                     </plugin>
                 </plugins>
