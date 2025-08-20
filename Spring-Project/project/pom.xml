@@ -111,14 +111,8 @@
                                     </platform>
                                 </platforms>
                             </from>
-                            <container>
-                                <!-- set the active Spring profile -->
-                                <jvmFlags>
-                                    <jvmFlag>-Dspring.profiles.active=prod</jvmFlag>
-                                </jvmFlags>
-                            </container>
                             <to>
-                                <image>docker://nanachi1027/spring-project/${project.artifactId}:${app.image.tag}</image>
+                                <image>docker://nanachi1027/${project.artifactId}:${app.image.tag}</image>
                             </to>
                         </configuration>
                         <executions>
@@ -157,18 +151,12 @@
                                 </platforms>
                             </from>
                             <to>
-                                <image>docker.io/nanachi1027/spring-project/${project.artifactId}:${app.image.tag}</image>
+                                <image>docker.io/nanachi1027/${project.artifactId}:${app.image.tag}</image>
                                 <auth>
                                     <username>${env.DOCKER_USERNAME}</username>
                                     <password>${env.DOCKER_PASSWORD}</password>
                                 </auth>
                             </to>
-                            <container>
-                                <!-- set the active Spring profile -->
-                                <jvmFlags>
-                                    <jvmFlag>-Dspring.profiles.active=prod</jvmFlag>
-                                </jvmFlags>
-                            </container>
                             <extraDirectories>
                                 <paths>
                                     <path>
