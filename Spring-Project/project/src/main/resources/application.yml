@@ -7,6 +7,8 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+    properties:
+      hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
   flyway:
     url: jdbc:mysql://127.0.0.1:3316/demo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     user: admin
