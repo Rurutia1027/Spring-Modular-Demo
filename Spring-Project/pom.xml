@@ -13,6 +13,7 @@
         <module>project</module>
         <module>aggregation</module>
         <module>gateway</module>
+        <module>bdd-test</module>
     </modules>
 
     <profiles>
