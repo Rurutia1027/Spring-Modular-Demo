@@ -1,8 +1,6 @@
 server:
   port: 8101
 spring:
-  profiles:
-    active: prod
   application:
     name: spring-project
   jpa:
