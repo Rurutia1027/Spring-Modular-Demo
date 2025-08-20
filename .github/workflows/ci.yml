@@ -14,7 +14,7 @@ jobs:
       redis:
         image: redis:6.2
         ports:
-          - 6379:6379
+          - 6389:6379
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
@@ -24,7 +24,7 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - 3306:3306
+          - 3316:3306
         env:
           MYSQL_ROOT_PASSWORD: root
         options: >-
@@ -32,6 +32,24 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      
+      consul:
+        image: consul:latest
+        ports:
+          - 8510:8500
+          - 8610:8600/udp
+        options: >-
+          agent -dev -client=0.0.0.0
+
+      envoy:
+        image: envoyproxy/envoy:v1.26.0
+        ports:
+          - 11000:10000
+        volumes:
+          - ./gateway/envoy.yml:/etc/envoy/envoy.yaml:ro
+        # make sure envoy waits for consul to start
+        options: >-
+          --restart=unless-stopped
 
     steps:
       - name: Checkout code
@@ -53,10 +71,10 @@ jobs:
 
       - name: Init MySQL schema and user
         run: |
-          echo "CREATE DATABASE link;" | mysql -h 127.0.0.1 -P 3306 -uroot -proot
-          echo "CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';" | mysql -h 127.0.0.1 -P 3306 -uroot -proot
-          echo "GRANT ALL PRIVILEGES ON link.* TO 'admin'@'%';" | mysql -h 127.0.0.1 -P 3306 -uroot -proot
-          echo "FLUSH PRIVILEGES;" | mysql -h 127.0.0.1 -P 3306 -uroot -proot
+          echo "CREATE DATABASE demo;" | mysql -h 127.0.0.1 -P 3316 -uroot -proot
+          echo "CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';" | mysql -h 127.0.0.1 -P 3316 -uroot -proot
+          echo "GRANT ALL PRIVILEGES ON link.* TO 'admin'@'%';" | mysql -h 127.0.0.1 -P 3316 -uroot -proot
+          echo "FLUSH PRIVILEGES;" | mysql -h 127.0.0.1 -P 3316 -uroot -proot
 
       - name: Wait for services
         run: |
