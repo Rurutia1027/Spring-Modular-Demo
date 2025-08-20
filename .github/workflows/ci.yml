@@ -34,12 +34,17 @@ jobs:
           --health-retries 5
       
       consul:
-        image: consul:latest
+        image: hashicorp/consul:latest
         ports:
           - 8510:8500
           - 8610:8600/udp
         options: >-
-          agent -dev -client=0.0.0.0
+          --entrypoint consul
+          hashicorp/consul:latest agent -dev -client=0.0.0.0
+          --health-cmd "curl -f http://localhost:8500/v1/status/leader || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
       envoy:
         image: envoyproxy/envoy:v1.26.0
