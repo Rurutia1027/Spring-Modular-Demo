@@ -1,0 +1,46 @@
+name: BDD Tests
+
+on:
+  workflow_run:
+    workflows: ["CI"]  # your main CI workflow
+    types:
+      - completed
+
+jobs:
+  bdd-tests:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    env:
+      SPRING_PROJECT_IMAGE: nanachi1027/project:${{ github.event.workflow_run.head_commit.id }}
+      DOCKER_COMPOSE_FILE: docker-compose.test.yml
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Pull latest Spring-Project image
+        run: docker pull $SPRING_PROJECT_IMAGE
+
+      - name: Start dependent services via Docker Compose
+        run: |
+          docker-compose -f $DOCKER_COMPOSE_FILE up -d
+
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting 20s for services..."
+          sleep 20
+
+      - name: Run BDD Tests
+        run: |
+          mvn clean test -f bdd-test/pom.xml -DskipTests=false
+
+      - name: Tear down Docker Compose
+        if: always()
+        run: docker-compose -f $DOCKER_COMPOSE_FILE down

@@ -1,16 +1,36 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.medium.demo.bdd.steps;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.medium.demo.bdd.util.HttpClientUtil;
-import org.medium.demo.project.common.convention.result.Result;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HelloSteps {
+
     private String name;
-    private String response;
+    private JsonNode responseBody;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Given("the name {string}")
     public void givenName(String name) {
@@ -18,18 +38,22 @@ public class HelloSteps {
     }
 
     @When("I call the hello endpoint")
-    public void callHelloEndpoint() {
-        Result<String> result = HttpClientUtil.get(
+    public void callHelloEndpoint() throws Exception {
+        // Fetch raw JSON response as String
+        String rawResponse = HttpClientUtil.get(
                 "http://localhost:8101/api/medium/demo/project/hello/" + name,
-                Result.class,
+                String.class,
                 null
         );
-        // cast to generic type manually since Java type erasure prevents direct mapping
-        response = (String) result.getData();
+
+        // Parse into JSON node
+        responseBody = objectMapper.readTree(rawResponse);
     }
 
     @Then("the response should be {string}")
     public void verifyResponse(String expected) {
-        assertEquals(expected, response);
+        // Extract the "data" field from JSON
+        String actual = responseBody.get("data").asText();
+        assertEquals(expected, actual);
     }
 }
