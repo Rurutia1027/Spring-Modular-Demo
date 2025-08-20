@@ -1,0 +1,37 @@
+server:
+  port: 8101
+spring:
+  application:
+    name: spring-project
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  flyway:
+    url: jdbc:mysql://mysql:3306/demo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    user: admin
+    password: admin
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    enabled: true
+  datasource:
+    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    url: jdbc:shardingsphere:classpath:shardingsphere-config-prod.yaml
+  data:
+    redis:
+      host: redis
+      port: 6379
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true    # enable retry for failed calls
+      ribbon:
+        enabled: false    # if you had Ribbon previously, disable it
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        register: true
+        service-name: spring-project
