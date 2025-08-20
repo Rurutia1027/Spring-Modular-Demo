@@ -17,6 +17,7 @@
 
 package org.medium.demo.project.entity;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,8 @@ import lombok.NoArgsConstructor;
 import org.medium.demo.project.common.db.BaseDO;
 
 @Data
-@Table(name = "short_link_route")
+@Entity
+@Table(name = "t_link_route")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
