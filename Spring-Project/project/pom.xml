@@ -118,7 +118,7 @@
                                 </jvmFlags>
                             </container>
                             <to>
-                                <image>docker://nanachi1027/spring-project/${project.artifactId}:${project.version}</image>
+                                <image>docker://nanachi1027/spring-project/${project.artifactId}:${app.image.tag}</image>
                             </to>
                         </configuration>
                         <executions>
@@ -157,7 +157,7 @@
                                 </platforms>
                             </from>
                             <to>
-                                <image>docker.io/nanachi1027/spring-project/${project.artifactId}:${project.version}</image>
+                                <image>docker.io/nanachi1027/spring-project/${project.artifactId}:${app.image.tag}</image>
                                 <auth>
                                     <username>${env.DOCKER_USERNAME}</username>
                                     <password>${env.DOCKER_PASSWORD}</password>
