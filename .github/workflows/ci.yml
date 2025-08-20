@@ -49,7 +49,7 @@ jobs:
           docker run -d --name envoy \
             -p 11000:10000 \
             --link consul:consul \
-            -v ${{ github.workspace }}/Spring-Project/gateway/enovy.yml:/etc/envoy/envoy.yaml:ro \
+            -v ${{ github.workspace }}/Spring-Project/gateway/envoy.yml:/etc/envoy/envoy.yaml:ro \
             envoyproxy/envoy:v1.26.0 \
             -c /etc/envoy/envoy.yaml
 
