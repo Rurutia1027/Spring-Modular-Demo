@@ -41,7 +41,7 @@ jobs:
         options: >-
           --entrypoint consul
           hashicorp/consul:latest agent -dev -client=0.0.0.0
-          --health-cmd "curl -f http://localhost:8500/v1/status/leader || exit 1"
+          --health-cmd "curl -f http://localhost:8510/v1/status/leader || exit 1"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
