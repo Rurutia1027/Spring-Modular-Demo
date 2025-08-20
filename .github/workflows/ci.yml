@@ -110,10 +110,7 @@ jobs:
 
       - name: Build Local Docker Image with Maven
         run: |
-          cd Spring-Project && mvn clean package \
-            -Pbuild-docker-image \ 
-            -Dapp.image.tag=${{ env.BUILD_NUMBER }} \ 
-            -Djib.container.jvmFlags="-Dspring.profiles.active=prod"
+          cd Spring-Project && mvn clean package -Pbuild-docker-image -Dapp.image.tag=${{ env.BUILD_NUMBER }} -Djib.container.jvmFlags="-Dspring.profiles.active=prod"
           # show local docker images 
           docker images 
         env:
