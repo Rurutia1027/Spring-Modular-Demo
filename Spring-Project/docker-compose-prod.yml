@@ -73,7 +73,7 @@ services:
 #  docker compose -f docker-compose-prod.yml rm -sf spring-project
 #  docker compose -f docker-compose-prod.yml up -d spring-project
   spring-project:
-    image: nanachi1027/project:20-08-2025-08-45-55
+    image: nanachi1027/project:20-08-2025-09-07-45
     container_name: spring-project
     ports:
       - "8101:8101"
