@@ -97,6 +97,11 @@ jobs:
           name: jacoco-report
           path: Spring-Project/project/target/site/jacoco/
 
+      # generate a timestamp based unique build number rather than using latest which is hard to distinguish
+      - name: Build Number
+        id: build-number
+        run: echo "::set-output name=BUILD_NUMBER::$(date '+%-d.%-m.%Y.%-H.%-M.%-S')"
+
       - name: Docker Login
         uses: docker/login-action@v2
         with:
@@ -105,7 +110,7 @@ jobs:
 
       - name: Build Local Docker Image with Maven
         run: |
-          cd Spring-Project && mvn clean package -Pbuild-docker-image
+          cd Spring-Project && mvn clean package -Pbuild-docker-image -Dapp.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}}
           # show local docker images 
           docker images 
         env:
