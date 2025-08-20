@@ -111,6 +111,12 @@
                                     </platform>
                                 </platforms>
                             </from>
+                            <container>
+                                <!-- set the active Spring profile -->
+                                <jvmFlags>
+                                    <jvmFlag>-Dspring.profiles.active=prod</jvmFlag>
+                                </jvmFlags>
+                            </container>
                             <to>
                                 <image>docker://nanachi1027/spring-project/${project.artifactId}:${project.version}</image>
                             </to>
@@ -157,6 +163,12 @@
                                     <password>${env.DOCKER_PASSWORD}</password>
                                 </auth>
                             </to>
+                            <container>
+                                <!-- set the active Spring profile -->
+                                <jvmFlags>
+                                    <jvmFlag>-Dspring.profiles.active=prod</jvmFlag>
+                                </jvmFlags>
+                            </container>
                             <extraDirectories>
                                 <paths>
                                     <path>
