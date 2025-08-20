@@ -17,6 +17,7 @@
 
 package org.medium.demo.project.entity;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +28,8 @@ import org.medium.demo.project.common.db.BaseDO;
 import java.util.Date;
 
 @Data
-@Table(name = "short_link")
+@Entity
+@Table(name = "t_link")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
