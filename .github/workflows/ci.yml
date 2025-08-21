@@ -163,6 +163,7 @@ jobs:
         ports:
           - 10000:10000
         options: >-
+          -v ${{ github.workspace }}/Spring-Project/gateway/envoy.yml:/etc/envoy/envoy.yaml:ro
           --health-cmd "curl -f http://localhost:10000 || exit 1"
           --health-interval 10s
           --health-timeout 5s
