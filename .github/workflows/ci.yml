@@ -132,6 +132,6 @@ jobs:
         run: |
           BUILD_NUMBER=${{ needs.compile-and-image-project.outputs.build_number }}
           echo "Running BDD against docker image with tag $BUILD_NUMBER"
-          # docker pull nanachi1027/project:$BUILD_NUMBER
+          docker pull nanachi1027/project:$BUILD_NUMBER
           # mvn verify -P bdd-test
   
