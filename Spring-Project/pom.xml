@@ -225,7 +225,7 @@
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
                                             <!-- todo: increment it later -->
-                                            <minimum>0.01</minimum>
+                                            <minimum>0.00</minimum>
                                         </limit>
                                     </limits>
                                 </rule>

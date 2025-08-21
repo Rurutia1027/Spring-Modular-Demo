@@ -15,10 +15,18 @@
  * limitations under the License.
  */
 
-package org.medium.demo;
+package org.medium.demo.bdd;
 
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
-    }
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+import org.junit.runner.RunWith;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(
+        features = "src/test/resources/features",
+        glue = "org.medium.demo.bdd.steps",
+        plugin = {"pretty", "json:target/cucumber.json"},
+        tags = "@smoke"
+)
+public class RunCucumberTest {
 }
