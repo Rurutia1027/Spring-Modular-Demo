@@ -145,8 +145,8 @@ jobs:
 
       - name: Run BDD Tests
         run: |
-          echo "gonna execute mvn verify -P bdd-test"
-          cd Spring-Project && mvn verify -P bdd-test
+          echo "gonna execute mvn verify"
+          cd Spring-Project && mvn verify
 
       - name: Upload cucumber.json
         uses: actions/upload-artifact@v4
