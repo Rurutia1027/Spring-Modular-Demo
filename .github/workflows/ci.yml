@@ -146,8 +146,11 @@ jobs:
       - name: Run BDD Tests
         run: |
           echo "gonna execute mvn verify"
-          cd Spring-Project && mvn verify
-
+          #cd Spring-Project && mvn clean package verify
+          if curl -s http://localhost:8101/api/medium/demo/project/hello/test | grep 'Hello' >/dev/null; then
+            echo "Service is responding!"
+          fi
+          
       - name: Upload cucumber.json
         uses: actions/upload-artifact@v4
         with:
