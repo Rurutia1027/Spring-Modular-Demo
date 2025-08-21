@@ -125,76 +125,31 @@ jobs:
     needs: compile-and-image-project
     runs-on: ubuntu-latest
 
-    services:
-      redis:
-        image: redis:7.0
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-      mysql:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: demo
-          MYSQL_USER: admin
-          MYSQL_PASSWORD: admin
-        options: >-
-          --health-cmd "mysqladmin ping -h 127.0.0.1 -uadmin -padmin"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout BDD code
         uses: actions/checkout@v3
-        
-      - name: Start Consul
-        run: |
-          docker run -d --name consul \
-            -p 8500:8500 -p 8610:8600/udp \
-            hashicorp/consul:latest \
-            agent -dev -client=0.0.0.0
 
-      - name: Start Envoy
+      - name: Set Build Number
         run: |
-          docker run -d --name envoy \
-            -p 10000:10000 \
-            --link consul:consul \
-            -v ${{ github.workspace }}/Spring-Project/gateway/envoy.yml:/etc/envoy/envoy.yaml:ro \
-            envoyproxy/envoy:v1.26.0 \
-            -c /etc/envoy/envoy.yaml
+          echo "BUILD_NUMBER=${{ needs.compile-and-image-project.outputs.build_number }}" >> $GITHUB_ENV
 
-      - name: Show Build Number
+      - name: Start services with Docker Compose
         run: |
-          echo "Build number: ${{ needs.compile-and-image-project.outputs.build_number }}"
+          # here we export the previous job's docker image tag BUILD_NUMBER and it will work in docker-compose-bdd.yml
+          BUILD_NUMBER=${{ env.BUILD_NUMBER }}
+          docker-compose -f Spring-Project/docker-compose-bdd.yml up -d --build
 
-      - name: Pull Project Image
+      - name: Wait for services to be ready
         run: |
-          BUILD_NUMBER=${{ needs.compile-and-image-project.outputs.build_number }}
-          docker pull nanachi1027/project:$BUILD_NUMBER
-
-      - name: Run Project Container
-        run: |
-          BUILD_NUMBER=${{ needs.compile-and-image-project.outputs.build_number }}
-          docker run -d --name spring-project \
-            -p 8101:8101 \
-            -e SPRING_PROFILES_ACTIVE=prod \
-            --link mysql:mysql \
-            --link redis:redis \
-            --link consul:consul \
-            --link envoy:envoy \
-            nanachi1027/project:$BUILD_NUMBER
-
-      - name: Wait for Project to be Healthy
-        run: |
-          echo "Waiting 30s for project container to start..."
+          echo "Waiting 30s for services to start..."
           sleep 30
 
       - name: Run BDD Tests
-        run: echo "mvn verify -P bdd-test"
+        run: |
+          cd Spring-Project/bdd-test
+          echo "gonna execute mvn verify -P bdd-test"
+
+      - name: Tear down Docker Compose services
+        if: always()
+        run: |
+          docker-compose -f Spring-Project/docker-compose-bdd.yml down
