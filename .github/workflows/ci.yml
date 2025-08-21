@@ -138,6 +138,10 @@ jobs:
           # here we export the previous job's docker image tag BUILD_NUMBER and it will work in docker-compose-bdd.yml
           BUILD_NUMBER=${{ env.BUILD_NUMBER }}
           docker compose -f Spring-Project/docker-compose-bdd.yml up -d --build
+          until [ "$(docker inspect -f '{{.State.Health.Status}}' spring-project-envoy)" = "healthy" ]; do
+            echo "Waiting for Envoy..."
+            sleep 5
+          done
 
       - name: Wait for services to be ready
         run: |
