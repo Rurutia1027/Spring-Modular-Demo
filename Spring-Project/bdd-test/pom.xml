@@ -108,34 +108,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M8</version>
             </plugin>
-
-            <!-- Cucumber Reporting plugin -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>generate-cucumber-report</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>net.masterthought.cucumber.ReportBuilder</mainClass>
-                            <arguments>
-                                <argument>--input</argument>
-                                <argument>${project.build.directory}/cucumber.json</argument>
-                                <argument>--output</argument>
-                                <argument>${project.build.directory}/cucumber-html-report</argument>
-                                <argument>--name</argument>
-                                <argument>BDD Test Report</argument>
-                            </arguments>
-                            <classpathScope>test</classpathScope>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 </project>

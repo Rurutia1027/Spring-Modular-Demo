@@ -148,6 +148,12 @@ jobs:
           echo "gonna execute mvn verify -P bdd-test"
           cd Spring-Project && mvn verify -P bdd-test
 
+      - name: Upload cucumber.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: cucumber-json
+          path: Spring-Project/bdd-test/target/cucumber.json
+
       - name: Tear down Docker Compose services
         if: always()
         run: |
