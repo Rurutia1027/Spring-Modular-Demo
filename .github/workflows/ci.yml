@@ -145,7 +145,6 @@ jobs:
 
       - name: Run BDD Tests
         run: |
-          cd Spring-Project/bdd-test
           echo "gonna execute mvn verify -P bdd-test"
           cd Spring-Project && mvn verify -P bdd-test
 
