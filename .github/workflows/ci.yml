@@ -124,15 +124,79 @@ jobs:
   run-bdd-tests:
     needs: compile-and-image-project
     runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:7.0
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: demo
+          MYSQL_USER: admin
+          MYSQL_PASSWORD: admin
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -uadmin -padmin"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      consul:
+        image: hashicorp/consul:latest
+        ports:
+          - 8500:8500
+        options: >-
+          --health-cmd "curl -f http://localhost:8500/v1/status/leader || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+      envoy:
+        image: envoyproxy/envoy:v1.26.0
+        ports:
+          - 10000:10000
+        options: >-
+          --health-cmd "curl -f http://localhost:10000 || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
+      - name: Checkout BDD code
+        uses: actions/checkout@v3
+
       - name: Show Build Number
         run: |
-          echo "Using build number from previous job: ${{ needs.compile-and-image-project.outputs.build_number }}"
+          echo "Build number: ${{ needs.compile-and-image-project.outputs.build_number }}"
 
-      - name: Run BDD Tests with correct Docker image
+      - name: Pull Project Image
         run: |
           BUILD_NUMBER=${{ needs.compile-and-image-project.outputs.build_number }}
-          echo "Running BDD against docker image with tag $BUILD_NUMBER"
           docker pull nanachi1027/project:$BUILD_NUMBER
-          # mvn verify -P bdd-test
-  
+
+      - name: Run Project Container
+        run: |
+          BUILD_NUMBER=${{ needs.compile-and-image-project.outputs.build_number }}
+          docker run -d --name spring-project \
+            -p 8101:8101 \
+            -e SPRING_PROFILES_ACTIVE=prod \
+            --link mysql:mysql \
+            --link redis:redis \
+            --link consul:consul \
+            --link envoy:envoy \
+            nanachi1027/project:$BUILD_NUMBER
+
+      - name: Wait for Project to be Healthy
+        run: |
+          echo "Waiting 30s for project container to start..."
+          sleep 30
+
+      - name: Run BDD Tests
+        run: echo "mvn verify -P bdd-test"
