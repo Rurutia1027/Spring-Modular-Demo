@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  compile-and-image-project:
     runs-on: ubuntu-latest
 
     services:
@@ -103,7 +103,6 @@ jobs:
         run: |
           BUILD_NUMBER=$(date '+%d-%m-%Y-%H-%M-%S')
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-          echo "$BUILD_NUMBER" > build-number.txt  
 
       - name: Docker Login
         uses: docker/login-action@v2
@@ -120,8 +119,20 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Upload Build Info
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-info
-          path: build-number.txt
+  run-bdd-tests:
+    needs: compile-and-image-project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read build number
+        id: buildnum
+        run: |
+          BUILD_NUMBER=$(cat build-number.txt)
+          echo "Build number is: $BUILD_NUMBER"
+          echo "build_number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
+
+      - name: Run BDD Tests with correct Docker image
+        run: |
+          echo "Running BDD against docker image with tag ${{ env.BUILD_NUMBER }}"
+          # docker pull nanachi1027/project:${{ env.BUILD_NUMBER }}
+          # mvn verify -P bdd-test
+  
