@@ -1,4 +1,4 @@
-name: Medium Demo Cloud Native Project with JaCoCo
+name: CI Build
 
 on:
   push:
