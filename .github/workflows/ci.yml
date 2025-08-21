@@ -142,20 +142,12 @@ jobs:
         run: |
           echo "Waiting 30s for services to start..."
           sleep 30
-      
-      - name: Show Envoy Logs
-        run: |
-          echo "==== Envoy Logs ===="
-          docker logs spring-project-envoy || true
-
-      - name: Verify Envoy admin endpoint
-        run: | 
-          curl -s http://localhost:9901/server_info || true
 
       - name: Run BDD Tests
         run: |
           cd Spring-Project/bdd-test
           echo "gonna execute mvn verify -P bdd-test"
+          cd Spring-Project && mvn verify -P bdd-test
 
       - name: Tear down Docker Compose services
         if: always()
