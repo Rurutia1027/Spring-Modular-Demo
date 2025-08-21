@@ -137,7 +137,7 @@ jobs:
         run: |
           # here we export the previous job's docker image tag BUILD_NUMBER and it will work in docker-compose-bdd.yml
           BUILD_NUMBER=${{ env.BUILD_NUMBER }}
-          docker-compose -f Spring-Project/docker-compose-bdd.yml up -d --build
+          docker compose -f Spring-Project/docker-compose-bdd.yml up -d --build
 
       - name: Wait for services to be ready
         run: |
@@ -152,4 +152,4 @@ jobs:
       - name: Tear down Docker Compose services
         if: always()
         run: |
-          docker-compose -f Spring-Project/docker-compose-bdd.yml down
+          docker compose -f Spring-Project/docker-compose-bdd.yml down
