@@ -84,10 +84,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      consul:
-        condition: service_healthy
-      envoy:
-        condition: service_healthy
     networks:
       - spring-project
 
