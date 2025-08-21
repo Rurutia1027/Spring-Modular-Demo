@@ -149,30 +149,26 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      consul:
-        image: hashicorp/consul:latest
-        ports:
-          - 8500:8500
-        options: >-
-          --health-cmd "curl -f http://localhost:8500/v1/status/leader || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-      envoy:
-        image: envoyproxy/envoy:v1.26.0
-        ports:
-          - 10000:10000
-        options: >-
-          -v ${{ github.workspace }}/Spring-Project/gateway:/etc/envoy
-          -c /etc/envoy/envoy.yaml
-          --health-cmd "curl -f http://localhost:10000 || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout BDD code
         uses: actions/checkout@v3
+        
+      - name: Start Consul
+        run: |
+          docker run -d --name consul \
+            -p 8500:8500 -p 8610:8600/udp \
+            hashicorp/consul:latest \
+            agent -dev -client=0.0.0.0
+
+      - name: Start Envoy
+        run: |
+          docker run -d --name envoy \
+            -p 10000:10000 \
+            --link consul:consul \
+            -v ${{ github.workspace }}/Spring-Project/gateway/envoy.yml:/etc/envoy/envoy.yaml:ro \
+            envoyproxy/envoy:v1.26.0 \
+            -c /etc/envoy/envoy.yaml
 
       - name: Show Build Number
         run: |
