@@ -16,7 +16,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <serenity.version>2.6.0</serenity.version>
-        <cucumber.version>6.11.0</cucumber.version>
+        <cucumber.version>7.15.0</cucumber.version>
         <jackson.version>2.16.2</jackson.version>
         <jedis.version>4.4.3</jedis.version>
         <grpc.version>1.60.0</grpc.version>
@@ -43,6 +43,14 @@
             <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Jackson for JSON serialization/deserialization -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -94,6 +102,40 @@
 
     <build>
         <plugins>
+            <!-- Surefire plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M8</version>
+            </plugin>
+
+            <!-- Cucumber Reporting plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-cucumber-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>net.masterthought.cucumber.ReportBuilder</mainClass>
+                            <arguments>
+                                <argument>--input</argument>
+                                <argument>${project.build.directory}/cucumber.json</argument>
+                                <argument>--output</argument>
+                                <argument>${project.build.directory}/cucumber-html-report</argument>
+                                <argument>--name</argument>
+                                <argument>BDD Test Report</argument>
+                            </arguments>
+                            <classpathScope>test</classpathScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
