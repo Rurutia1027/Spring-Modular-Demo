@@ -98,9 +98,12 @@ jobs:
           path: Spring-Project/project/target/site/jacoco/
 
       # generate a timestamp based unique build number rather than using latest which is hard to distinguish
-      - name: Build Number
+      - name: Generate Build Number and Save It to File
         id: build-number
-        run: echo "BUILD_NUMBER=$(date '+%d-%m-%Y-%H-%M-%S')" >> $GITHUB_ENV
+        run: |
+          BUILD_NUMBER=$(date '+%d-%m-%Y-%H-%M-%S')
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+          echo "$BUILD_NUMBER" > build-number.txt  
 
       - name: Docker Login
         uses: docker/login-action@v2
@@ -116,3 +119,9 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Upload Build Info
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-info
+          path: build-number.txt
