@@ -147,6 +147,12 @@ jobs:
         run: |
           echo "Waiting 30s for services to start..."
           sleep 30
+      
+      - name: Show Envoy Logs
+        if: failure()
+        run: |
+          echo "==== Envoy Logs ===="
+          docker logs spring-project-envoy || true
 
       - name: Run BDD Tests
         run: |

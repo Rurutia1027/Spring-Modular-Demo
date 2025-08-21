@@ -11,7 +11,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/status/leader" ]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 2
     networks:
       - spring-project
     restart: unless-stopped
@@ -19,6 +19,9 @@ services:
   # docker-compose up -d  envoy
   envoy:
     image: envoyproxy/envoy:v1.26.0
+    depends_on:
+      consul:
+        condition: service_healthy
     container_name: spring-project-envoy
     ports:
       - "10000:10000"
@@ -26,13 +29,11 @@ services:
       test: [ "CMD-SHELL", "curl -f http://127.0.0.1:10000 || exit 1" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 2
     volumes:
       - ./gateway/envoy.yml:/etc/envoy/envoy.yaml:ro  # Envoy config YML file
     networks:
       - spring-project
-    depends_on:
-      - consul
     restart: unless-stopped
     logging: # enable inner envoy loggingd
       driver: "json-file"
@@ -54,7 +55,7 @@ services:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "admin", "-padmin" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 2
     volumes:
       - spring-project_mysql_data:/var/lib/mysql
     networks:
@@ -69,7 +70,7 @@ services:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 2
     volumes:
       - spring-project_redis_data:/data
     networks:
