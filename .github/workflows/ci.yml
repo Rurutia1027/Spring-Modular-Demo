@@ -148,6 +148,10 @@ jobs:
           echo "==== Envoy Logs ===="
           docker logs spring-project-envoy || true
 
+      - name: Verify Envoy admin endpoint
+        run: | 
+          curl -s http://localhost:9901/server_info || true
+
       - name: Run BDD Tests
         run: |
           cd Spring-Project/bdd-test
